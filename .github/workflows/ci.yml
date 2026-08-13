@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-python:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Install uv and Python
+        uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+          python-version-file: .python-version
+
+      - name: Sync locked environment
+        run: uv sync --locked --all-groups
+
+      - name: Lint
+        run: uv run ruff check src tests
+
+      - name: Check formatting
+        run: uv run ruff format --check src tests
+
+      - name: Run tool-independent tests
+        run: uv run pytest -m "not integration" -q
+
+      - name: Build package
+        run: uv build

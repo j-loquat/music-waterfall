@@ -1,0 +1,32 @@
+/output/
+/tmp/
+/.venv/
+/.pytest_cache/
+/.ruff_cache/
+/.mypy_cache/
+/dist/
+/build/
+/*.egg-info/
+/.coverage
+/.idea/
+/.vscode/
+/IMPLEMENTATION_GOAL.md
+__pycache__/
+*.py[cod]
+*.log
+
+# Personal/test score inputs and generated media stay local. The only media
+# fixtures allowed in Git are the attributed public-domain Fur Elise pair.
+*.mid
+*.midi
+*.pdf
+*.mxl
+*.musicxml
+*.mscz
+*.omr
+*.sf2
+*.sf3
+*.wav
+*.mp4
+!tests/fixtures/midi/fur-elise-mutopia.mid
+!tests/fixtures/pdf/fur-elise-mutopia-letter.pdf
