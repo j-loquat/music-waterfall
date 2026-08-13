@@ -112,17 +112,18 @@ change the machine-wide PowerShell policy.
 
 The installer performs these actions:
 
-1. Installs or updates uv, FFmpeg/FFprobe, Audiveris, and MuseScore Studio from WinGet.
-2. Downloads the current stable official FluidSynth Windows x64 archive from its GitHub
+1. Checks for WinGet, then installs or updates uv as the first external package.
+2. Installs or updates FFmpeg/FFprobe, Audiveris, and MuseScore Studio from WinGet.
+3. Downloads the current stable official FluidSynth Windows x64 archive from its GitHub
    release page.
-3. Requires and verifies the SHA-256 digest supplied with the FluidSynth release asset.
-4. Installs FluidSynth under `%LOCALAPPDATA%\MusicWaterfall\tools\fluidsynth`.
-5. Installs Python 3.12 through uv.
-6. Creates the repository-local `.venv` and synchronizes the exact package versions in
+4. Requires and verifies the SHA-256 digest supplied with the FluidSynth release asset.
+5. Installs FluidSynth under `%LOCALAPPDATA%\MusicWaterfall\tools\fluidsynth`.
+6. Uses uv to find or install Python 3.12.
+7. Creates the repository-local `.venv` and synchronizes the exact package versions in
    `uv.lock`.
-7. Saves any required local tool-path overrides in
+8. Saves any required local tool-path overrides in
    `%LOCALAPPDATA%\MusicWaterfall\config.json`.
-8. Runs the tool doctor, linter, full test suite, local media integration test when its
+9. Runs the tool doctor, linter, full test suite, local media integration test when its
    tools are available, and package build.
 
 Do not run `MuseScore4.exe --version` while diagnosing an installation. On some Windows
@@ -131,7 +132,25 @@ product metadata instead.
 
 ### Launch the GUI
 
-From the repository directory, run:
+Open the repository directory in File Explorer. Double-click
+[`Launch Music Waterfall.bat`](Launch%20Music%20Waterfall.bat). The launcher opens the
+correct repository directory, finds uv in the standard Windows locations, and starts the
+GUI. Keep the launcher window open while Music Waterfall runs.
+
+For one-click desktop access, right-click `Launch Music Waterfall.bat`, select **Show more
+options > Send to > Desktop (create shortcut)**. You can set **Run** to **Minimized** in
+the shortcut properties if you do not want the launcher window in front of the GUI.
+
+To verify the launcher without opening the GUI, run:
+
+```powershell
+& ".\Launch Music Waterfall.bat" --check
+```
+
+The expected result includes the detected uv path and uv version. If the launcher cannot
+find uv, it shows the exact installer command to run.
+
+You can also launch the GUI directly from PowerShell:
 
 ```powershell
 uv run music-waterfall-gui
@@ -244,6 +263,7 @@ uv run ruff check src tests
 uv run ruff format --check src tests
 uv run pytest -q
 uv build
+& ".\Launch Music Waterfall.bat" --check
 uv run music-waterfall-gui
 ```
 
